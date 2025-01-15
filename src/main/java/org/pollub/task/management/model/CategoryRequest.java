@@ -2,10 +2,8 @@ package org.pollub.task.management.model;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record TaskRequest(
+public record CategoryRequest(
         @NotBlank
-        String name,
-        String categoryName,
-        Boolean isResolved
+        String name
 ) {
 }

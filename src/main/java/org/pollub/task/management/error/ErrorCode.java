@@ -1,5 +1,5 @@
 package org.pollub.task.management.error;
 
 public enum ErrorCode {
-    NOT_FOUND
+    BAD_REQUEST, NOT_FOUND
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import org.pollub.task.management.model.Task;
 import org.pollub.task.management.persistance.SimpleMappableEntity;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @AllArgsConstructor
@@ -20,9 +22,12 @@ public class TaskEntity implements SimpleMappableEntity<Task> {
     @Column(nullable = false)
     @Setter
     private Boolean isResolved;
+    @ManyToOne
+    @Setter
+    private CategoryEntity category;
 
     @Override
     public Task toDomain() {
-        return new Task(id, name, isResolved);
+        return new Task(id, name, category != null ? category.getName() : null, isResolved);
     }
 }

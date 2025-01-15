@@ -2,7 +2,9 @@ package org.pollub.task.management.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.pollub.task.management.model.CategoryRequest;
 import org.pollub.task.management.model.TaskRequest;
+import org.pollub.task.management.service.CategoryService;
 import org.pollub.task.management.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class TaskController {
 
     private final TaskService taskService;
+    private final CategoryService categoryService;
     private final ApiMapper apiMapper;
 
     @GetMapping
@@ -33,6 +36,21 @@ public class TaskController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteTask(@PathVariable("id") Integer id) {
         return apiMapper.handleTo204(() -> taskService.deleteTask(id));
+    }
+
+    @PostMapping("category")
+    public ResponseEntity<?> createCategory(@RequestBody @Valid CategoryRequest request) {
+        return apiMapper.handleTo201(() -> categoryService.createCategory(request));
+    }
+
+    @PatchMapping("category/{id}")
+    public ResponseEntity<?> editCategory(@RequestBody @Valid CategoryRequest request, @PathVariable("id") Integer id) {
+        return apiMapper.handleTo200(() -> categoryService.editCategory(id, request));
+    }
+
+    @DeleteMapping("category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") Integer id) {
+        return apiMapper.handleTo204(() -> categoryService.deleteCategory(id));
     }
 
 }
