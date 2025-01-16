@@ -5,6 +5,7 @@ import org.pollub.task.management.persistance.SimpleMappableEntity;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -16,6 +17,10 @@ public abstract class MappableService {
 
     <T> T callRepositoryMappingToDomain(Supplier<? extends SimpleMappableEntity<T>> entitySupplier) {
         return Objects.requireNonNullElse(entitySupplier.get().toDomain(), null);
+    }
+
+    <T> Optional<T> callRepositoryMappingToDomainOptional(Supplier<Optional<? extends SimpleMappableEntity<T>>> entitySupplier) {
+        return entitySupplier.get().map(SimpleMappableEntity::toDomain);
     }
 
     private <T> Stream<T> nullSafeStream(Collection<T> collection) {

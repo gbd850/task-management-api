@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.pollub.task.management.error.CategoryNotFound;
 import org.pollub.task.management.error.TaskNotFound;
 import org.pollub.task.management.model.Task;
+import org.pollub.task.management.model.TaskGroup;
 import org.pollub.task.management.model.TaskRequest;
 import org.pollub.task.management.persistance.entity.CategoryEntity;
 import org.pollub.task.management.persistance.entity.TaskEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +23,15 @@ public class TaskService extends MappableService {
     private final TaskRepository taskRepository;
     private final CategoryRepository categoryRepository;
 
-    public List<Task> getTasks() {
-        return callRepositoryMappingToDomainList(taskRepository::findAll);
+    public List<TaskGroup> getTasks() {
+        return callRepositoryMappingToDomainList(taskRepository::findAll).stream()
+                .collect(Collectors.groupingBy(Task::categoryName)).entrySet().stream()
+                .map(taskEntry -> new TaskGroup(taskEntry.getKey(), taskEntry.getValue()))
+                .toList();
+    }
+
+    public Task getTaskById(Integer id) {
+        return callRepositoryMappingToDomainOptional(() -> taskRepository.findById(id)).orElseThrow(() -> TaskNotFound.byId(id));
     }
 
     public Task createTask(TaskRequest request) {

@@ -23,6 +23,11 @@ public class TaskController {
         return apiMapper.handleTo200(taskService::getTasks);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> getTaskById(@PathVariable("id") Integer id) {
+        return apiMapper.handleTo200(() -> taskService.getTaskById(id));
+    }
+
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody @Valid TaskRequest request) {
         return apiMapper.handleTo201(() -> taskService.createTask(request));

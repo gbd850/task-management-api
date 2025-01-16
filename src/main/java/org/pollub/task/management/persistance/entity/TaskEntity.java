@@ -28,6 +28,6 @@ public class TaskEntity implements SimpleMappableEntity<Task> {
 
     @Override
     public Task toDomain() {
-        return new Task(id, name, category != null ? category.getName() : null, isResolved);
+        return new Task(id, name, category != null ? category.getName() : "", isResolved);
     }
 }
