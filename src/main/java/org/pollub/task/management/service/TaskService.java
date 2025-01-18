@@ -35,7 +35,7 @@ public class TaskService extends MappableService {
     }
 
     public Task createTask(TaskRequest request) {
-        final CategoryEntity categoryEntity = request.categoryName() != null ?
+        final CategoryEntity categoryEntity = request.categoryName() != null && !request.categoryName().isEmpty() ?
                 categoryRepository.findByName(request.categoryName()).orElseThrow(() -> CategoryNotFound.byName(request.categoryName())) : null;
 
         final TaskEntity createdTask = new TaskEntity(null, request.name(), false, categoryEntity);
@@ -43,12 +43,16 @@ public class TaskService extends MappableService {
     }
 
     public Task editTask(Integer id, TaskRequest request) {
-        final CategoryEntity categoryChange = request.categoryName() != null ?
+        final CategoryEntity categoryChange = request.categoryName() != null && !request.categoryName().isEmpty() ?
                 categoryRepository.findByName(request.categoryName()).orElseThrow(() -> CategoryNotFound.byName(request.categoryName())) : null;
 
         final var taskToEdit = taskRepository.findById(id).orElseThrow(() -> TaskNotFound.byId(id));
         taskToEdit.setName(Objects.requireNonNullElse(request.name(), taskToEdit.getName()));
         taskToEdit.setIsResolved(Objects.requireNonNullElse(request.isResolved(), taskToEdit.getIsResolved()));
+
+        if (request.categoryName() != null && request.categoryName().isEmpty()) {
+            taskToEdit.setCategory(null);
+        }
 
         if (categoryChange != null) {
             taskToEdit.setCategory(categoryChange);

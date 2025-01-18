@@ -43,6 +43,11 @@ public class TaskController {
         return apiMapper.handleTo204(() -> taskService.deleteTask(id));
     }
 
+    @GetMapping("category")
+    public ResponseEntity<?> getCategories() {
+        return apiMapper.handleTo200(categoryService::getCategories);
+    }
+
     @PostMapping("category")
     public ResponseEntity<?> createCategory(@RequestBody @Valid CategoryRequest request) {
         return apiMapper.handleTo201(() -> categoryService.createCategory(request));

@@ -9,11 +9,17 @@ import org.pollub.task.management.persistance.entity.CategoryEntity;
 import org.pollub.task.management.persistance.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService extends MappableService {
 
     private final CategoryRepository categoryRepository;
+
+    public List<Category> getCategories() {
+        return callRepositoryMappingToDomainList(categoryRepository::findAll);
+    }
 
     public Category createCategory(CategoryRequest request) {
         if (categoryRepository.findByName(request.name()).isPresent()) {
